@@ -44,7 +44,7 @@ def fuzzy_search(query):
             "fuzzy": {
                 "text": {
                     "value": query,
-                    "fuzziness": 2
+                    "fuzziness": 1
                 }
             }
         },
