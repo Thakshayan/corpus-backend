@@ -42,8 +42,12 @@ def fuzzy_search(query):
         "query": {
             "fuzzy": {
                 "text": {
-                    "value": query,
-                    "fuzziness": 2
+                    "fuzziness": "AUTO",
+                    "prefix_length": 0,
+                    "max_expansions": 100,
+                    "transpositions": True,
+                    "unicode_aware": True,
+                    "language": "tamil"
                 }
             }
         }
@@ -53,8 +57,12 @@ def fuzzy_search(query):
 def search(query,filter, fields):
     
     print(filter)
-    if filter:
-        query_body = advanced_query_search( query, fields)
+    if filter == "full":
+        query_body = full_text_search(query)
+    if filter == "fuzzy":
+        query_body = fuzzy_search(query)
+    elif filter:
+        query_body = advanced_query_search(query, fields)
     else:
         query_body = basic_query_search(query)
     res = client.search(index=INDEX, body=query_body)
