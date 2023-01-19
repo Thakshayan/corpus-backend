@@ -1,7 +1,10 @@
 from elasticsearch import Elasticsearch
 
 
-def basic_search(query):
+INDEX = 'lyrics-search-engine'
+client = Elasticsearch(HOST="http://localhost", PORT=9200)
+
+def basic_query_search(query):
     q = {
         "query": {
             "query_string": {
@@ -12,7 +15,7 @@ def basic_search(query):
     }
     return q
 
-def advanced_search(query, fields):
+def advanced_query_search(query, fields):
     q = {
         "query": {
             "multi_match": {
@@ -24,21 +27,35 @@ def advanced_search(query, fields):
     }
     return q
 
+def full_text_search(query):
+    q = {
+        "query": {
+            "match_phrase_prefix": {
+                "text": query
+            }
+        }
+    }
+    return q
 
-INDEX = 'lyrics-search-engine'
-client = Elasticsearch(HOST="http://localhost", PORT=9200,
-                       http_auth=('elastic', 'EMyoDwDL4UH=4GHQW5X='))
-
+def fuzzy_search(query):
+    q = {
+        "query": {
+            "fuzzy": {
+                "text": {
+                    "value": query,
+                    "fuzziness": 2
+                }
+            }
+        }
+    }
+    return q
 
 def search(query,filter, fields):
-    # result = client. (index=INDEX,body=standard_analyzer(query))
-    # keywords = result ['tokens']['token']
-    # print(keywords)
-
+    
     print(filter)
-    # query_body= process(query)
-    query_body = advanced_search(
-        query, fields) if filter else basic_search(query)
-    print('Making Basic Search ')
+    if filter:
+        query_body = advanced_query_search( query, fields)
+    else:
+        query_body = basic_query_search(query)
     res = client.search(index=INDEX, body=query_body)
     return res
