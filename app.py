@@ -20,9 +20,12 @@ def hello_world():
     data = json.loads(request.data)
     query = data['query']
     print(data)
-    if ('filter' in data):
+    if ('filter' in data and 'fields' in data):
         filter = data['filter']
         fields = data['fields']
+    elif ('filter' in data ):
+        filter = data['filter']
+        fields = []
     else:
         filter = False
         fields = []

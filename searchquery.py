@@ -33,7 +33,8 @@ def full_text_search(query):
             "match_phrase_prefix": {
                 "text": query
             }
-        }
+        },
+        "size":101
     }
     return q
 
@@ -50,7 +51,8 @@ def fuzzy_search(query):
                     "language": "tamil"
                 }
             }
-        }
+        },
+        "size":101
     }
     return q
 
