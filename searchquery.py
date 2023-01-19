@@ -43,18 +43,32 @@ def fuzzy_search(query):
         "query": {
             "fuzzy": {
                 "text": {
-                    "fuzziness": "AUTO",
-                    "prefix_length": 0,
-                    "max_expansions": 100,
-                    "transpositions": True,
-                    "unicode_aware": True,
-                    "language": "tamil"
+                    "value": query,
+                    "fuzziness": 2
                 }
             }
         },
         "size":101
     }
     return q
+
+# def fuzzy_search(query):
+#     q = {
+#         "query": {
+#             "fuzzy": {
+#                 "text": {
+#                     "fuzziness": "AUTO",
+#                     "prefix_length": 0,
+#                     "max_expansions": 100,
+#                     "transpositions": True,
+#                     "unicode_aware": True,
+#                     "language": "tamil"
+#                 }
+#             }
+#         },
+#         "size":101
+#     }
+#     return q
 
 def search(query,filter, fields):
     
