@@ -30,11 +30,25 @@ def advanced_query_search(query, fields):
 def full_text_search(query):
     q = {
         "query": {
-            "match_phrase_prefix": {
-                "text": query
+            "match_phrase" : {
+                "lyrics": query
             }
         },
         "size":101
+    }
+    return q
+
+def multi_language_search(query):
+    q = {
+        "query": {
+            "bool": {
+                "should": [
+                    { "match_phrase": { "lyrics": query } },
+                    { "match_phrase": { "lyrics.tamil_analyzer": query } }
+                ]
+            }
+        },
+        "size": 101
     }
     return q
 
@@ -42,7 +56,7 @@ def fuzzy_search(query):
     q = {
         "query": {
             "fuzzy": {
-                "text": {
+                "song_name": {
                     "value": query,
                     "fuzziness": 1
                 }
@@ -52,17 +66,31 @@ def fuzzy_search(query):
     }
     return q
 
+def match_phrase_search():
+    q = {
+        
+     "query": {
+        "match_phrase": {
+            "song_name": {
+                "query":"Nee Illai Endraal"
+            } 
+        }
+    },
+
+        "size":101
+    }
+    return q
+
+
 # def fuzzy_search(query):
 #     q = {
 #         "query": {
 #             "fuzzy": {
 #                 "text": {
+#                     "value": query,
 #                     "fuzziness": "AUTO",
 #                     "prefix_length": 0,
-#                     "max_expansions": 100,
-#                     "transpositions": True,
-#                     "unicode_aware": True,
-#                     "language": "tamil"
+#                     "max_expansions": 100
 #                 }
 #             }
 #         },
@@ -74,12 +102,16 @@ def search(query,filter, fields):
     
     print(filter)
     if filter == "full":
-        query_body = full_text_search(query)
-    if filter == "fuzzy":
+        query_body = match_phrase_search()
+        print(query_body)
+    elif filter == "fuzzy":
         query_body = fuzzy_search(query)
+        
     elif filter:
         query_body = advanced_query_search(query, fields)
     else:
         query_body = basic_query_search(query)
+    print(query_body)
     res = client.search(index=INDEX, body=query_body)
+    print(res)
     return res

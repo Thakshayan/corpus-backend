@@ -18,6 +18,10 @@
                     "case_insensitive_and_inflections": {
                         "filter": ["lowercase", "porter_stem"],
                         "tokenizer": "standard"
+                    },
+                    "tamil_analyzer":{
+                        "type": "icu_analyzer",
+                        "language": "ta"
                     }
                 }
             }
@@ -40,8 +44,13 @@
                     "case_insensitive_and_inflections": {
                         "type": "text",
                         "analyzer": "case_insensitive_and_inflections"
+                    },
+                    "tamil_analyzer":{
+                        "type":"text",
+                        "analyzer": "tamil_analyzer"
                     }
-                }
+                },
+                "fuzzy": true 
             },
             "lyrics": {
                 "type": "text",
@@ -63,19 +72,23 @@
             },
             "album": {
                 "type": "text",
-                "analyzer": "plain"
+                "analyzer": "plain",
+                "fuzzy": true 
             },
             "lyricist": {
                 "type": "text",
-                "analyzer": "plain"
+                "analyzer": "plain",
+                "fuzzy": true 
             },
             "singers": {
                 "type": "text",
-                "analyzer": "plain"
+                "analyzer": "plain",
+                "fuzzy": true 
             },
             "composer": {
                 "type": "text",
-                "analyzer": "plain"
+                "analyzer": "plain",
+                "fuzzy": true 
             },
             "metaphors": {
                 "properties": {
@@ -89,6 +102,7 @@
                 "type": "date",
                 "format": "yyyy"
             }
+           
         }
     }
 }
